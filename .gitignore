@@ -1,0 +1,16 @@
+# Also works when git init is run inside this Unity project directory.
+/*
+!/.gitignore
+!/Assets/
+!/Packages/
+!/ProjectSettings/
+
+# Unity-generated content inside otherwise tracked directories.
+/Assets/AssetStoreTools/
+/Assets/AssetStoreTools.meta
+/Assets/StreamingAssets/aa/
+/Assets/StreamingAssets/aa.meta
+**/.DS_Store
+**/Thumbs.db
+**/*~
+# All remaining .meta files MUST be committed alongside their assets.

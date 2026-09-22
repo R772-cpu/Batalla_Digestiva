@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0faf2d168eb02b343b2d5db093479f47, type: 3}
+  m_Name: Moperid
+  m_EditorClassIdentifier: Assembly-CSharp::BatallaDigestiva.CharacterData
+  productId: moperid
+  displayName: Moperid
+  normalSprite: {fileID: 3575521950118940481, guid: 8d858d68b28435e46ab191eff8b0f651, type: 3}
+  hitSprite: {fileID: -3904916899949578262, guid: 775233261255a0b43bf84b2596787d34, type: 3}
+  productSprite: {fileID: -3606581290811843057, guid: 1a238c009d4b7fc49a661673bb3a1341, type: 3}
+  medalSprite: {fileID: -6825356842244753594, guid: 38f1c0c48b769514d851def1bbf07e0a, type: 3}
+  shortDescription: 
+  useSpritePhysicsShape: 1

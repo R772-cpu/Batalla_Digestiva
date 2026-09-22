@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0faf2d168eb02b343b2d5db093479f47, type: 3}
+  m_Name: Metrozin
+  m_EditorClassIdentifier: Assembly-CSharp::BatallaDigestiva.CharacterData
+  productId: metrozin
+  displayName: Metrozin
+  normalSprite: {fileID: 6040942250310036794, guid: 6663eb6948ba60e4090dad6fa6f7e1c5, type: 3}
+  hitSprite: {fileID: 8205473392231743886, guid: 2d4691edc3b49954a87b1976bb13355f, type: 3}
+  productSprite: {fileID: -3630245545802285077, guid: fe99895b65486f74eb35afe6687c5a44, type: 3}
+  medalSprite: {fileID: 8641983251593211040, guid: 58a3afbd3ebd2604aa281f8123e29bea, type: 3}
+  shortDescription: 
+  useSpritePhysicsShape: 1

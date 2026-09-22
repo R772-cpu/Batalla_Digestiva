@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57e78c2379b7c6b4c99c64798fd836bb, type: 3}
+  m_Name: PrototypeConfig
+  m_EditorClassIdentifier: Assembly-CSharp::BatallaDigestiva.GameConfig
+  roundDuration: 60
+  pointsPerTarget: 10
+  spawnInterval: 1.6
+  targetLifetime: 11
+  maxTargets: 11
+  targetSize: 150
+  correctAnswerBonus: 20
+  targetsPerMedal: 5
+  spawnBatch: 2
+  sameProductGroup: 3
+  initialTargets: 4
+  finalSpawnIntervalMultiplier: 1
+  powerUpInterval: 8
+  powerUpLifetime: 8
+  bubbleSprite: {fileID: 1717298279705212019, guid: 066628f4e6e9b77438f21061cbd4d9d0, type: 3}
+  hitHoldDuration: 0.5
+  hitFadeDuration: 0.4
