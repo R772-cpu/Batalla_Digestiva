@@ -9,11 +9,13 @@ namespace BatallaDigestiva
         public RectTransform playArea;
         public TargetView targetPrefab;
         public CharacterData[] characters;
+        public RectTransform[] excludedUI;
         private readonly List<TargetView> targets = new List<TargetView>();
         private readonly List<CharacterData> bag = new List<CharacterData>();
         private float nextSpawn;
         private CharacterData groupedCharacter;
         private int groupRemaining;
+        private Func<TargetView, bool> hitHandler;
         public List<TargetView> ActiveTargets => targets.FindAll(target => target.State == TargetView.TargetState.Active);
         public List<TargetView> VisibleTargets => targets.FindAll(target => target.State == TargetView.TargetState.Active || target.State == TargetView.TargetState.Spawning);
         public Rect? PowerUpSpace { get; set; }
@@ -25,10 +27,12 @@ namespace BatallaDigestiva
             targets.Clear(); bag.Clear(); nextSpawn = 0;
             groupRemaining = 0; groupedCharacter = null;
             PowerUpSpace = null;
+            hitHandler = null;
         }
 
         public void Seed(GameConfig config, Func<TargetView, bool> hit)
         {
+            hitHandler = hit;
             for (int i = 0; i < Mathf.Min(config.initialTargets, config.maxTargets); i++) Spawn(config, hit);
             nextSpawn = Mathf.Max(0.1f, config.spawnInterval);
         }
@@ -58,6 +62,24 @@ namespace BatallaDigestiva
             var bounds = playArea.rect;
             position = default;
             if (size.x > bounds.width || size.y > bounds.height) return false;
+            var exclusions = new List<Rect>();
+            if (excludedUI != null)
+            {
+                var corners = new Vector3[4];
+                foreach (var ui in excludedUI)
+                {
+                    if (ui == null || !ui.gameObject.activeInHierarchy) continue;
+                    ui.GetWorldCorners(corners);
+                    var min = new Vector2(float.MaxValue, float.MaxValue);
+                    var max = new Vector2(float.MinValue, float.MinValue);
+                    foreach (var corner in corners)
+                    {
+                        Vector2 local = playArea.InverseTransformPoint(corner);
+                        min = Vector2.Min(min, local); max = Vector2.Max(max, local);
+                    }
+                    exclusions.Add(Rect.MinMaxRect(min.x, min.y, max.x, max.y));
+                }
+            }
             float bestDistance = -1;
             for (int attempt = 0; attempt < 100; attempt++)
             {
@@ -65,6 +87,7 @@ namespace BatallaDigestiva
                     UnityEngine.Random.Range(bounds.yMin + size.y / 2, bounds.yMax - size.y / 2));
                 var space = new Rect(candidate - size / 2 - Vector2.one * 24, size + Vector2.one * 48);
                 if (PowerUpSpace.HasValue && space.Overlaps(PowerUpSpace.Value)) continue;
+                if (exclusions.Exists(exclusion => space.Overlaps(exclusion))) continue;
                 bool fits = true;
                 float nearest = PowerUpSpace.HasValue ? (candidate - PowerUpSpace.Value.center).sqrMagnitude : float.MaxValue;
                 foreach (var other in targets)
@@ -101,6 +124,30 @@ namespace BatallaDigestiva
             }
             var character = groupedCharacter;
             groupRemaining--;
+            CreateTarget(character, config, hit, position, size);
+        }
+
+        public bool EnsurePowerUpTarget(CharacterData character, GameConfig config, bool activating)
+        {
+            if (VisibleTargets.Exists(target => target.Character.productId == character.productId)) return true;
+            if (hitHandler == null || targetPrefab == null) return false;
+            float size = Mathf.Min(config.targetSize, playArea.rect.width * .3f, playArea.rect.height * .42f);
+            if (size < 20) return false;
+            Vector2 position;
+            if (VisibleTargets.Count >= config.maxTargets || !TryFindSpace(Vector2.one * size, out position))
+            {
+                // On activation the product frees its reserved footprint. Use that free
+                // space for the last reinforcement instead of consuming an empty pickup.
+                if (!activating || !PowerUpSpace.HasValue) return false;
+                position = PowerUpSpace.Value.center;
+                size = Mathf.Min(size, PowerUpSpace.Value.width, PowerUpSpace.Value.height);
+            }
+            CreateTarget(character, config, hitHandler, position, size);
+            return true;
+        }
+
+        private void CreateTarget(CharacterData character, GameConfig config, Func<TargetView, bool> hit, Vector2 position, float size)
+        {
             var target = Instantiate(targetPrefab, playArea);
             target.Rect.anchorMin = target.Rect.anchorMax = new Vector2(0.5f, 0.5f);
             target.Rect.anchoredPosition = position;

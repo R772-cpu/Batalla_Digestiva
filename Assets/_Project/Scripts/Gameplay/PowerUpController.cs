@@ -42,6 +42,7 @@ namespace BatallaDigestiva
                 remaining -= delta;
                 if (remaining <= 0)
                 { Hide(); return; }
+                spawner.EnsurePowerUpTarget(selected, config, false);
                 float pulse = 0.6f + Mathf.Sin((config.powerUpLifetime - remaining) * 7) * 0.25f;
                 if (glow != null) glow.color = new Color(1, 0.83f, 0.2f, pulse);
                 if (sparkles != null) sparkles.color = new Color(1, 1, 1, pulse);
@@ -76,6 +77,7 @@ namespace BatallaDigestiva
         private void Activate()
         {
             if (!running || selected == null) return;
+            if (!spawner.EnsurePowerUpTarget(selected, config, true)) return;
             string id = selected.productId;
             var audio = GameAudio.Instance;
             if (audio != null) audio.Play(audio.powerUp);

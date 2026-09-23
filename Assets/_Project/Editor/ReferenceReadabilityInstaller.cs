@@ -56,6 +56,7 @@ namespace BatallaDigestiva.Editor
             RefineFinalScore(game);
             RefineInstructionsHeader(game);
             InstallMissionTitleArtwork(game);
+            InstallClientReviewLayout(game);
             ApplyStaticFontWeights(game);
         }
 

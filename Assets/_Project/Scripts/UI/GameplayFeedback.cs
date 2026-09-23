@@ -8,9 +8,11 @@ namespace BatallaDigestiva
     {
         public Text pointsTemplate;
         public Text medalNotice;
+        public Image medalNoticeImage;
         private sealed class Point { public Text text; public float age; public Vector2 origin; public bool active; }
         private readonly List<Point> points = new List<Point>();
-        private readonly Queue<string> notices = new Queue<string>();
+        private struct Notice { public string text; public Sprite sprite; }
+        private readonly Queue<Notice> notices = new Queue<Notice>();
         private float noticeTime;
         private int next;
 
@@ -40,9 +42,10 @@ namespace BatallaDigestiva
             point.text.gameObject.SetActive(true);
         }
 
-        public void Medal(string product, int count)
+        public void Medal(CharacterData character, int count)
         {
-            notices.Enqueue("¡Medalla de " + product + "!  x" + count);
+            notices.Enqueue(new Notice { text = character.displayName + " ×" + count,
+                sprite = character.medalSprite != null ? character.medalSprite : character.normalSprite });
         }
 
         // Lo actualiza GameController: la pausa congela los mensajes igual que los personajes.
@@ -59,7 +62,13 @@ namespace BatallaDigestiva
             }
             noticeTime -= delta;
             if (noticeTime > 0) return;
-            medalNotice.text = notices.Count > 0 ? notices.Dequeue() : "";
+            var notice = notices.Count > 0 ? notices.Dequeue() : default;
+            medalNotice.text = notice.text ?? "";
+            if (medalNoticeImage != null)
+            {
+                medalNoticeImage.sprite = notice.sprite;
+                medalNoticeImage.gameObject.SetActive(notice.sprite != null);
+            }
             noticeTime = medalNotice.text.Length > 0 ? 1.5f : 0;
         }
 
@@ -68,6 +77,7 @@ namespace BatallaDigestiva
             foreach (var point in points) { point.active = false; point.text.gameObject.SetActive(false); }
             notices.Clear(); noticeTime = 0; next = 0;
             medalNotice.text = "";
+            if (medalNoticeImage != null) medalNoticeImage.gameObject.SetActive(false);
         }
     }
 }

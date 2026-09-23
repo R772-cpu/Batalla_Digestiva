@@ -85,7 +85,7 @@ namespace BatallaDigestiva
             if (feedback != null)
             {
                 feedback.ShowPoints(target.Rect.anchoredPosition, config.pointsPerTarget);
-                if (newMedal) feedback.Medal(target.Character.displayName, medals.Medals(target.Character.productId));
+                if (newMedal) feedback.Medal(target.Character, medals.Medals(target.Character.productId));
             }
             if (medalsHUD != null) medalsHUD.Refresh(medals);
             RefreshHUD();
